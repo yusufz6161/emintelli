@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emin Telli | Profesyonel Tenis Antrenörü</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-red: #ff0015;
+            --dark-bg: #030303;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        h1, h2, h3, .font-oswald {
+            font-family: 'Oswald', sans-serif;
+        }
+
+        /* --- LIGHT MODE (Aydınlık Tema) OVERRIDES --- */
+        body.light-mode {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        body.light-mode header {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom-color: #e2e8f0;
+        }
+        body.light-mode .text-white { color: #0f172a !important; }
+        body.light-mode .text-gray-300 { color: #334155 !important; }
+        body.light-mode .text-gray-400 { color: #475569 !important; }
+        body.light-mode .text-gray-500 { color: #64748b !important; }
+        
+        body.light-mode .bg-\[\#080808\], 
+        body.light-mode .bg-\[\#050505\], 
+        body.light-mode .bg-\[\#0a0a0a\], 
+        body.light-mode .bg-\[\#020202\], 
+        body.light-mode .bg-black {
+            background-color: #ffffff !important;
+        }
+        
+        body.light-mode .border-gray-900, 
+        body.light-mode .border-gray-800,
+        body.light-mode .border-\[\#111\] {
+            border-color: #e2e8f0 !important;
+        }
+        
+        body.light-mode input, 
+        body.light-mode textarea, 
+        body.light-mode select {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
+        }
+        
+        /* Aydınlık modda gradyanlı yazıyı koyulaştırma */
+        body.light-mode .bg-gradient-to-r.from-white {
+            background-image: linear-gradient(to right, #0f172a, #334155, #64748b) !important;
+        }
+        
+        /* Aydınlık modda navbar linkleri */
+        body.light-mode nav a {
+            color: #475569;
+        }
+        body.light-mode nav a:hover {
+            color: #0f172a;
+        }
+
+        body.light-mode .racket-img {
+            filter: drop-shadow(0 0 15px rgba(255, 0, 21, 0.3));
+        }
+
+        /* Sayfa Kaydırma (Scroll Reveal) Efekti */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.9s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Neon Buton ve Form Efektleri */
+        .btn-neon {
+            background-color: transparent;
+            border: 2px solid var(--primary-red);
+            color: var(--primary-red);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(255, 0, 21, 0.2);
+        }
+        /* Dark mode default button text */
+        body:not(.light-mode) .btn-neon {
+            color: #fff;
+        }
+        .btn-neon::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 0%; height: 100%;
+            background-color: var(--primary-red);
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+        .btn-neon:hover::before {
+            width: 100%;
+        }
+        .btn-neon:hover {
+            box-shadow: 0 0 20px var(--primary-red);
+            transform: translateY(-2px);
+            color: #fff !important;
+        }
+
+        .input-glow:focus {
+            outline: none;
+            border-color: var(--primary-red) !important;
+            box-shadow: 0 0 10px rgba(255, 0, 21, 0.2);
+        }
+
+        /* ---- HERO (GİRİŞ) ANİMASYON ALANI ---- */
+        .hero-animation-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        @media (min-width: 768px) {
+            .hero-animation-container {
+                height: 500px;
+            }
+        }
+
+        /* Gerçekçi Yatay Raket SVG Ayarları */
+        .racket-img {
+            width: 350px;
+            height: auto; 
+            position: absolute; 
+            z-index: 20; 
+            filter: drop-shadow(0 0 20px rgba(255, 0, 21, 0.6));
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: racketVerticalHit 1.5s infinite ease-in-out;
+            transition: filter 0.4s ease;
+        }
+
+        @media (min-width: 768px) {
+            .racket-img {
+                width: 450px;
+                bottom: 50px;
+            }
+        }
+
+        /* Neon Tenis Topu Ayarları */
+        .tennis-ball {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: var(--primary-red);
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: 0 0 25px var(--primary-red), inset -3px -3px 10px rgba(0,0,0,0.5);
+            bottom: 110px; 
+            left: 50%;
+            margin-left: -80px;
+            transform-origin: center bottom;
+            animation: ballVerticalBounceMobile 1.5s infinite;
+        }
+
+        @media (min-width: 768px) {
+            .tennis-ball {
+                width: 30px;
+                height: 30px;
+                bottom: 140px; 
+                margin-left: -105px;
+                box-shadow: 0 0 25px var(--primary-red), inset -5px -5px 15px rgba(0,0,0,0.5);
+                animation: ballVerticalBounceDesktop 1.5s infinite;
+            }
+        }
+
+        /* Raketin Vuruş (Yukarı-Aşağı) Animasyonu */
+        @keyframes racketVerticalHit {
+            0% { transform: translateX(-50%) translateY(0) rotate(0deg); }
+            45% { transform: translateX(-50%) translateY(5px) rotate(-1deg); } 
+            50% { transform: translateX(-50%) translateY(-15px) rotate(2deg); } 
+            65% { transform: translateX(-50%) translateY(0) rotate(0deg); }
+            100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
+        }
+
+        /* Top Sektirme ve Ezilme (Squash) Animasyonu (Masaüstü) */
+        @keyframes ballVerticalBounceDesktop {
+            0% { transform: translateY(-280px); height: 30px; width: 30px; animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); margin-left: -105px; }
+            45% { transform: translateY(5px); height: 30px; width: 30px; margin-left: -105px; } 
+            50% { transform: translateY(-15px); height: 16px; width: 38px; border-radius: 40%; margin-left: -109px; } 
+            55% { transform: translateY(-60px); height: 30px; width: 30px; animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94); border-radius: 50%; margin-left: -105px; } 
+            100% { transform: translateY(-280px); height: 30px; width: 30px; margin-left: -105px; }
+        }
+        
+        /* Top Sektirme ve Ezilme (Squash) Animasyonu (Mobil) */
+        @keyframes ballVerticalBounceMobile {
+            0% { transform: translateY(-220px); height: 25px; width: 25px; animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); margin-left: -80px; }
+            45% { transform: translateY(5px); height: 25px; width: 25px; margin-left: -80px; } 
+            50% { transform: translateY(-12px); height: 14px; width: 32px; border-radius: 40%; margin-left: -83px; } 
+            55% { transform: translateY(-50px); height: 25px; width: 25px; animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94); border-radius: 50%; margin-left: -80px; } 
+            100% { transform: translateY(-220px); height: 25px; width: 25px; margin-left: -80px; }
+        }
+
+        /* Derinlik katan arka plan ızgarası */
+        .bg-grid-pattern {
+            background-image: 
+                linear-gradient(to right, rgba(255, 0, 21, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 0, 21, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-red-600 selection:text-white">
+
+    <header class="fixed w-full top-0 z-50 bg-[#030303]/90 backdrop-blur-md border-b border-gray-900 transition-all duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 bg-transparent border-2 border-[#ff0015] flex items-center justify-center rounded-sm transform -skew-x-12 group-hover:bg-[#ff0015] transition-colors shadow-[0_0_15px_rgba(255,0,21,0.4)]">
+                    <span class="font-black text-white text-xl font-oswald group-hover:text-white transition-colors">ET</span>
+                </div>
+                <span class="text-2xl font-bold tracking-wider font-oswald text-white uppercase">Emin <span class="text-[#ff0015]">Telli</span></span>
+            </a>
+            
+            <!-- Menü Linkleri (Sadece Masaüstü) -->
+            <nav class="hidden md:flex items-center gap-8 font-semibold text-xs tracking-[0.2em] uppercase text-gray-400">
+                <a href="#hero" class="hover:text-white hover:shadow-[0_2px_0_red] transition-all pb-1">Anasayfa</a>
+                <a href="#hakkimda" class="hover:text-white hover:shadow-[0_2px_0_red] transition-all pb-1">Hakkımda</a>
+                <a href="#programlar" class="hover:text-white hover:shadow-[0_2px_0_red] transition-all pb-1">Programlar</a>
+                <a href="#iletisim" class="hover:text-white hover:shadow-[0_2px_0_red] transition-all pb-1">İletişim</a>
+                
+                <!-- Tema Değiştirici Buton -->
+                <button id="theme-toggle" class="ml-4 w-9 h-9 flex items-center justify-center rounded-full border border-gray-700 bg-transparent hover:border-[#ff0015] hover:text-[#ff0015] transition-all cursor-pointer">
+                    <i class="fa-solid fa-moon text-sm"></i>
+                </button>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <!-- Mobil için Tema Değiştirici -->
+                <button id="theme-toggle-mobile" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-gray-700 bg-transparent hover:border-[#ff0015] hover:text-[#ff0015] transition-all cursor-pointer">
+                    <i class="fa-solid fa-moon text-sm text-gray-400"></i>
+                </button>
+                <a href="#iletisim" class="hidden md:block btn-neon px-6 py-2 text-xs font-bold tracking-widest uppercase rounded">
+                    Korta Çık
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section id="hero" class="relative w-full min-h-screen flex flex-col justify-center pt-32 pb-24 md:pt-24 md:pb-12 bg-grid-pattern overflow-hidden">
+        <!-- Ambiyans Kırmızı Parlama -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#ff0015] rounded-full blur-[250px] opacity-10 pointer-events-none"></div>
+
+        <div class="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-12 items-center z-10 relative">
+            
+            <!-- Sol Taraf: Metin İçeriği -->
+            <div class="flex flex-col gap-6 z-10 relative">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-[2px] bg-[#ff0015] shadow-[0_0_10px_red]"></div>
+                    <span class="uppercase tracking-[0.25em] text-xs text-[#ff0015] font-bold">Profesyonel Tenis Eğitimi</span>
+                </div>
+                
+                <!-- Çakışmayı önlemek için satır yüksekliği ferahlatıldı (1.5) ve font küçültüldü (6xl) -->
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-black uppercase mb-4" style="font-family: 'Montserrat', sans-serif; line-height: 1.5;">
+                    Kortun <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-600 drop-shadow-lg transition-all duration-300">Hakimi Ol.</span>
+                </h1>
+                
+                <p class="text-gray-400 text-lg font-light leading-relaxed max-w-lg mt-2">
+                    Emin Telli ile sınırlarını zorla. Doğru teknik, sarsılmaz bir mentalite ve üst düzey kondisyon için profesyonel eğitimlere bugün başla.
+                </p>
+                
+                <div class="flex flex-wrap gap-5 mt-6">
+                    <a href="#iletisim" class="btn-neon px-8 py-4 uppercase font-bold tracking-widest text-sm inline-flex items-center gap-3 rounded">
+                        Randevu Oluştur
+                        <i class="fa-solid fa-arrow-right-long text-[12px]"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Sağ Taraf: Raket ve Top Animasyonu -->
+            <div class="flex justify-center items-center relative h-full w-full">
+                <div class="hero-animation-container">
+                    <!-- Seken Top -->
+                    <div class="tennis-ball"></div>
+                    
+                    <!-- Yatay Gerçekçi Raket SVG -->
+                    <svg viewBox="0 0 500 200" class="racket-img" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="strings" width="12" height="12" patternUnits="userSpaceOnUse">
+                                <line x1="0" y1="0" x2="0" y2="12" stroke="#e5e5e5" stroke-width="0.8" opacity="0.4"/>
+                                <line x1="0" y1="0" x2="12" y2="0" stroke="#e5e5e5" stroke-width="0.8" opacity="0.4"/>
+                            </pattern>
+                            <linearGradient id="carbon" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#333333"/>
+                                <stop offset="50%" stop-color="#555555"/>
+                                <stop offset="100%" stop-color="#1a1a1a"/>
+                            </linearGradient>
+                        </defs>
+                        <ellipse cx="150" cy="100" rx="106" ry="76" fill="url(#strings)"/>
+                        <path d="M 220 40 Q 300 85 350 86 L 350 114 Q 300 115 220 160" fill="none" stroke="url(#carbon)" stroke-width="14" stroke-linecap="round"/>
+                        <ellipse cx="150" cy="100" rx="110" ry="80" fill="none" stroke="url(#carbon)" stroke-width="14"/>
+                        <ellipse cx="150" cy="100" rx="104" ry="74" fill="none" stroke="#000" stroke-width="3"/>
+                        <path d="M 150 20 A 110 80 0 0 0 150 180" fill="none" stroke="#111" stroke-width="4"/>
+                        <rect x="348" y="86" width="130" height="28" fill="#151515" rx="2" />
+                        <path d="M 360 86 L 370 114 M 380 86 L 390 114 M 400 86 L 410 114 M 420 86 L 430 114 M 440 86 L 450 114 M 460 86 L 470 114" stroke="#000" stroke-width="2"/>
+                        <path d="M 475 82 L 475 118 L 495 120 L 495 80 Z" fill="#222"/>
+                        <text x="488" y="104" fill="#ff0015" font-family="'Oswald', sans-serif" font-size="13" font-weight="bold" text-anchor="middle" transform="rotate(90 488 100)">ET</text>
+                    </svg>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <section id="hakkimda" class="py-24 bg-[#080808] relative border-t border-gray-900 transition-colors duration-300">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <!-- Sol Fotoğraf (IMG_0625.jpg) -->
+                <div class="relative reveal">
+                    <div class="aspect-[4/5] bg-[#111] relative z-10 overflow-hidden rounded-xl border border-gray-800 shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-colors duration-300">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10 pointer-events-none"></div>
+                        <!-- Antrenör Fotoğrafı -->
+                        <img src="IMG_0625.jpg" alt="Antrenör Emin Telli" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105">
+                    </div>
+                    <!-- Neon Kırmızı Arka Çerçeve -->
+                    <div class="absolute -bottom-5 -right-5 w-full h-full border-2 border-[#ff0015] shadow-[0_0_20px_rgba(255,0,21,0.3)] z-0 rounded-xl transition-all duration-300"></div>
+                </div>
+
+                <!-- Sağ Metin Alanı ve Yeni İstatistikler -->
+                <div class="reveal">
+                    <!-- Çakışmayı önlemek için satır yüksekliği 1.5 olarak sabitlendi -->
+                    <h2 class="text-3xl md:text-4xl font-black uppercase mb-6 tracking-wide" style="font-family: 'Montserrat', sans-serif; line-height: 1.5;">
+                        Şampiyonlar <br>
+                        <span class="text-[#ff0015]">Kortta Üretilir.</span>
+                    </h2>
+                    <div class="w-20 h-1 bg-[#ff0015] mb-8 shadow-[0_0_10px_red]"></div>
+                    
+                    <p class="text-gray-300 text-lg mb-6 leading-relaxed">
+                        Tenis sadece bir spor değil; sabır, strateji ve dayanıklılık oyunudur. Yılların tecrübesiyle, her yaştan oyuncunun potansiyelini maksimuma çıkarmak için özel antrenman metodolojileri uyguluyorum.
+                    </p>
+                    <p class="text-gray-400 mb-10 leading-relaxed font-light">
+                        Modern vuruş teknikleri, biyomekanik analizler ve kort içi zihinsel dayanıklılık (mental toughness) çalışmaları ile standartlarınızı yeniden belirleyeceğiz. Hedefiniz ister hobi amaçlı gelişim, ister profesyonel turnuvalar olsun; doğru adrestesiniz.
+                    </p>
+                    
+                    <!-- Yeni İstatistik Alanı (Siteye Entegre Edilmiş Hali) -->
+                    <div class="grid grid-cols-2 gap-8 border-l-4 border-[#ff0015] pl-6 py-3 bg-gradient-to-r from-[#ff0015]/5 to-transparent">
+                        <!-- Akademik Eğitim -->
+                        <div>
+                            <h4 class="text-2xl md:text-3xl font-black text-white transition-colors duration-300" style="font-family: 'Montserrat', sans-serif; line-height: 1.2;">AKADEMİK</h4>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mt-2 font-bold">Spor Eğitimi</p>
+                        </div>
+                        <!-- Öğrenci Sayısı -->
+                        <div>
+                            <h4 class="text-3xl md:text-4xl font-black text-[#ff0015] drop-shadow-[0_0_10px_rgba(255,0,21,0.5)]" style="font-family: 'Montserrat', sans-serif; line-height: 1.2;">100+</h4>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mt-2 font-bold">Gelişen Sporcu</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="programlar" class="py-24 relative bg-[#050505] transition-colors duration-300">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20 reveal flex flex-col items-center">
+                <span class="text-[#ff0015] font-bold tracking-[0.3em] uppercase text-xs mb-3 block">Size Uygun Eğitim</span>
+                <h2 class="text-4xl md:text-6xl font-black uppercase font-oswald mb-6">Antrenman <span class="text-[#ff0015]">Programları</span></h2>
+                <div class="w-24 h-[2px] bg-gradient-to-r from-transparent via-[#ff0015] to-transparent"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Program Kartı 1 -->
+                <div class="bg-[#0a0a0a] p-10 border border-gray-900 hover:border-[#ff0015] hover:shadow-[0_0_30px_rgba(255,0,21,0.1)] transition-all duration-300 group reveal rounded-sm relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-[#ff0015] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                    <div class="w-16 h-16 border border-gray-800 bg-black rounded-full flex items-center justify-center mb-8 group-hover:border-[#ff0015] group-hover:text-[#ff0015] transition-colors shadow-inner">
+                        <i class="fa-solid fa-user-ninja text-2xl text-gray-400 group-hover:text-[#ff0015]"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold uppercase font-oswald mb-4 text-white transition-colors duration-300">Birebir (Özel) Ders</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-8">
+                        Kişisel hedeflerinize yönelik %100 odaklanmış teknik gelişim ve biyomekanik düzeltme çalışmaları.
+                    </p>
+                    <ul class="text-gray-400 text-sm space-y-3 font-semibold">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-bolt text-[#ff0015]"></i> Hızlı Gelişim</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-bolt text-[#ff0015]"></i> Teknik Analiz</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-bolt text-[#ff0015]"></i> Esnek Planlama</li>
+                    </ul>
+                </div>
+
+                <!-- Program Kartı 2 -->
+                <div class="bg-[#0a0a0a] p-10 border border-gray-900 hover:border-[#ff0015] hover:shadow-[0_0_30px_rgba(255,0,21,0.1)] transition-all duration-300 group reveal rounded-sm relative overflow-hidden" style="transition-delay: 150ms;">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-[#ff0015] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                    <div class="w-16 h-16 border border-gray-800 bg-black rounded-full flex items-center justify-center mb-8 group-hover:border-[#ff0015] group-hover:text-[#ff0015] transition-colors shadow-inner">
+                        <i class="fa-solid fa-users text-2xl text-gray-400 group-hover:text-[#ff0015]"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold uppercase font-oswald mb-4 text-white transition-colors duration-300">Grup Antrenmanı</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-8">
+                        Rekabetçi bir ortamda, maç pratiği ve taktiksel oyun kurma becerilerinizi geliştireceğiniz takım çalışmaları.
+                    </p>
+                    <ul class="text-gray-400 text-sm space-y-3 font-semibold">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-bolt text-[#ff0015]"></i> 2-4 Kişilik Grup</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-bolt text-[#ff0015]"></i> Maç Simülasyonları</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-bolt text-[#ff0015]"></i> Taktiksel Driller</li>
+                    </ul>
+                </div>
+
+                <!-- Program Kartı 3 -->
+                <div class="bg-[#0a0a0a] p-10 border border-gray-900 hover:border-[#ff0015] hover:shadow-[0_0_30px_rgba(255,0,21,0.1)] transition-all duration-300 group reveal rounded-sm relative overflow-hidden" style="transition-delay: 300ms;">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-[#ff0015] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                    <div class="w-16 h-16 border border-gray-800 bg-black rounded-full flex items-center justify-center mb-8 group-hover:border-[#ff0015] group-hover:text-[#ff0015] transition-colors shadow-inner">
+                        <i class="fa-solid fa-trophy text-2xl text-gray-400 group-hover:text-[#ff0015]"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold uppercase font-oswald mb-4 text-white transition-colors duration-300">Turnuva Hazırlık</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-8">
+                        Şampiyonalar için yüksek yoğunluklu kondisyon, strateji ve korta özel mental dayanıklılık kampları.
+                    </p>
+                    <ul class="text-gray-400 text-sm space-y-3 font-semibold">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-bolt text-[#ff0015]"></i> Yoğun Kondisyon</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-bolt text-[#ff0015]"></i> Psikolojik Hazırlık</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-bolt text-[#ff0015]"></i> Rakip Analizi</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="iletisim" class="py-24 bg-[#0a0a0a] border-t border-gray-900 overflow-hidden relative transition-colors duration-300">
+        <div class="container mx-auto px-6">
+            <div class="max-w-5xl mx-auto bg-black border border-gray-800 p-8 md:p-16 reveal shadow-2xl relative rounded-sm transition-colors duration-300">
+                
+                <div class="absolute -left-20 -bottom-20 w-72 h-72 bg-[#ff0015] rounded-full blur-[150px] opacity-20 pointer-events-none"></div>
+
+                <div class="text-center mb-12 relative z-10">
+                    <h2 class="text-3xl md:text-5xl font-black uppercase font-oswald mb-4 text-white transition-colors duration-300">İlk Adımı <span class="text-[#ff0015]">At.</span></h2>
+                    <p class="text-gray-400 font-light">Seviyeniz ne olursa olsun, doğru programı oluşturmak için formu doldurun. Size en kısa sürede ulaşacağım.</p>
+                </div>
+
+                <!-- Şık Mesaj Kutusu -->
+                <div id="form-message-box" class="hidden mb-8 p-5 border-l-4 border-[#ff0015] bg-[#111] text-white rounded-sm transform transition-all duration-300">
+                    <div class="flex items-center gap-4">
+                        <i class="fa-solid fa-circle-check text-[#ff0015] text-2xl"></i>
+                        <div>
+                            <h4 class="font-bold text-sm uppercase tracking-wider">Talebiniz Alındı</h4>
+                            <p class="text-xs text-gray-400 mt-1">Emin Telli sizinle en kısa sürede iletişime geçecektir. Kortta görüşmek üzere!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="contact-form" class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold">Ad Soyad</label>
+                        <input type="text" required class="bg-[#050505] border border-gray-800 text-white px-5 py-4 input-glow transition-all rounded-sm text-sm" placeholder="Adınız Soyadınız">
+                    </div>
+                    
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold">Telefon Numarası</label>
+                        <input type="tel" required class="bg-[#050505] border border-gray-800 text-white px-5 py-4 input-glow transition-all rounded-sm text-sm" placeholder="0555 555 55 55">
+                    </div>
+
+                    <div class="flex flex-col gap-2 md:col-span-2">
+                        <label class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold">Oyun Seviyeniz</label>
+                        <select class="bg-[#050505] border border-gray-800 text-gray-400 px-5 py-4 input-glow transition-all rounded-sm appearance-none text-sm cursor-pointer">
+                            <option value="baslangic">Başlangıç Seviyesi - Temel Eğitime İhtiyacım Var</option>
+                            <option value="orta">Orta Seviye - Tekniğimi ve Pratiğimi Geliştirmek İstiyorum</option>
+                            <option value="ileri">İleri Seviye / Turnuva - Performans Odaklı Antrenman</option>
+                        </select>
+                    </div>
+
+                    <div class="flex flex-col gap-2 md:col-span-2">
+                        <label class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold">Hedefleriniz / Eklemek İstedikleriniz</label>
+                        <textarea rows="4" required class="bg-[#050505] border border-gray-800 text-white px-5 py-4 input-glow transition-all resize-none rounded-sm text-sm" placeholder="Örn: Hafta içi akşam dersleri almak istiyorum..."></textarea>
+                    </div>
+
+                    <div class="md:col-span-2 mt-4">
+                        <button type="submit" class="w-full btn-neon py-5 uppercase font-bold tracking-widest flex justify-center items-center gap-3 rounded-sm text-sm">
+                            Gönder <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#020202] py-12 border-t border-[#111] text-center relative z-10 transition-colors duration-300">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col items-center justify-center gap-6 mb-8">
+                <a href="#" class="flex items-center gap-2 group">
+                    <span class="text-2xl font-bold tracking-wider font-oswald text-white uppercase transition-colors duration-300">Emin <span class="text-[#ff0015]">Telli</span></span>
+                </a>
+                <p class="text-gray-500 text-sm max-w-sm">Korttaki potansiyelini keşfet. Modern tenis antrenmanları ile sınırlarını aş.</p>
+                
+                <div class="flex gap-4">
+                    <!-- Sadece Instagram ve WhatsApp eklendi, YouTube çıkarıldı. Özel bağlantılar eklendi -->
+                    <a href="https://www.instagram.com/muhammetemintelli/" target="_blank" class="w-12 h-12 rounded-full border border-gray-800 bg-[#0a0a0a] flex items-center justify-center text-gray-400 hover:text-[#ff0015] hover:border-[#ff0015] transition-all hover:shadow-[0_0_15px_rgba(255,0,21,0.5)]">
+                        <i class="fa-brands fa-instagram text-lg"></i>
+                    </a>
+                    <a href="https://wa.me/905339466934" target="_blank" class="w-12 h-12 rounded-full border border-gray-800 bg-[#0a0a0a] flex items-center justify-center text-gray-400 hover:text-[#ff0015] hover:border-[#ff0015] transition-all hover:shadow-[0_0_15px_rgba(255,0,21,0.5)]">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                    </a>
+                </div>
+            </div>
+            <p class="text-gray-500 text-[10px] tracking-widest uppercase font-semibold">
+                &copy; 2026 Emin Telli Profesyonel Tenis Akademisi. Tüm Hakları Saklıdır.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- TEMA (DARK / LIGHT MODE) DEĞİŞTİRME MANTIĞI ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeToggleBtnMobile = document.getElementById('theme-toggle-mobile');
+            const body = document.body;
+            
+            function toggleTheme() {
+                body.classList.toggle('light-mode');
+                const isLight = body.classList.contains('light-mode');
+                
+                // İkonları güncelle (Desktop)
+                const iconDesktop = themeToggleBtn.querySelector('i');
+                if(isLight) {
+                    iconDesktop.classList.remove('fa-moon');
+                    iconDesktop.classList.add('fa-sun');
+                } else {
+                    iconDesktop.classList.remove('fa-sun');
+                    iconDesktop.classList.add('fa-moon');
+                }
+
+                // İkonları güncelle (Mobile)
+                const iconMobile = themeToggleBtnMobile.querySelector('i');
+                if(isLight) {
+                    iconMobile.classList.remove('fa-moon');
+                    iconMobile.classList.add('fa-sun');
+                } else {
+                    iconMobile.classList.remove('fa-sun');
+                    iconMobile.classList.add('fa-moon');
+                }
+            }
+
+            themeToggleBtn.addEventListener('click', toggleTheme);
+            themeToggleBtnMobile.addEventListener('click', toggleTheme);
+
+            // --- SCROLL REVEAL (Kaydırma Animasyonları) ---
+            const reveals = document.querySelectorAll('.reveal');
+            const revealOnScroll = () => {
+                const windowHeight = window.innerHeight;
+                const elementVisible = 100;
+
+                reveals.forEach((reveal) => {
+                    const elementTop = reveal.getBoundingClientRect().top;
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveal.classList.add('active');
+                    }
+                });
+            };
+
+            window.addEventListener('scroll', revealOnScroll);
+            revealOnScroll();
+
+            // --- FORM GÖNDERİMİ ---
+            const form = document.getElementById('contact-form');
+            const messageBox = document.getElementById('form-message-box');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault(); 
+                
+                // Mesaj kutusunu göster
+                messageBox.classList.remove('hidden');
+                
+                // Kullanıcının mesajı görmesi için form alanına hafifçe kaydır
+                messageBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Formu temizle
+                form.reset();
+                
+                // 5 saniye sonra mesaj kutusunu otomatik gizle
+                setTimeout(() => {
+                    messageBox.classList.add('hidden');
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>
